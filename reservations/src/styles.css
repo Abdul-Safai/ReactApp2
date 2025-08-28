@@ -1,4 +1,7 @@
-/* ---------- Light, Colorful, Professional Theme (drop-in) ---------- */
+/* ===============================
+   Light, Colorful, Professional Theme
+   (organized & de-duplicated)
+   =============================== */
 :root{
   --page-bg: #f7fafc;
   --panel: #ffffff;
@@ -18,6 +21,7 @@
   --shadow-soft: 0 6px 14px rgba(15, 23, 42, .06);
 }
 
+/* Base */
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
 body{
@@ -29,11 +33,9 @@ body{
     radial-gradient(900px 400px at 100% 0%, rgba(16,185,129,.08), transparent 60%),
     var(--page-bg);
 }
-
-/* Layout */
 .container{ max-width:1100px; margin:36px auto 80px; padding:0 20px; }
 
-/* Header */
+/* Header (default) */
 .header{
   display:flex; align-items:center; justify-content:space-between;
   padding:18px 20px; margin-bottom:16px;
@@ -42,12 +44,16 @@ body{
   border:1px solid var(--border);
   box-shadow: var(--shadow-soft);
 }
+
+/* Title + subtitle (generic use) */
 .title{
-  font-size:28px; font-weight:800; letter-spacing:-.02em; margin-bottom:6px;
-  background: linear-gradient(90deg, #0f172a, #2563eb);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing:-.02em;
+  margin:0 0 6px 0;
+  color: var(--text);
 }
-.subtitle{ color: var(--muted); }
+.subtitle{ color: var(--muted); margin: 0; }
 
 /* Cards & grids */
 .card{
@@ -80,8 +86,18 @@ input:focus, select:focus{
   transform: translateY(-1px);
 }
 
-/* Buttons */
-button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-weight:700; }
+/* Buttons — unified for <button> and <a class="btn"> */
+.btn, a.btn, button.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;     /* no underline on links */
+}
 .btn{
   background: linear-gradient(180deg, var(--primary-500), var(--primary-600));
   color:#fff;
@@ -90,17 +106,31 @@ button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-we
 }
 .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
 .btn:active{ transform: translateY(0); filter: brightness(.98); }
+
 .btn.secondary{
   background: linear-gradient(180deg, #10b981, #059669);
+  color:#fff;
   box-shadow: 0 8px 16px rgba(16, 185, 129, .22);
 }
 .btn.ghost{
-  background: transparent; color:#0f172a;
+  background: transparent;
+  color:#0f172a;
   border:1px solid var(--border);
 }
-.actions{ display:flex; gap:10px; flex-wrap:wrap; }
+/* Ensure link-buttons inherit the right color */
+a.btn:link, a.btn:visited{ color: inherit; }
 
-/* Toggle next to "Group by Area" */
+/* Action group */
+.actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap: nowrap;      /* single line */
+  white-space: nowrap;
+}
+.actions .btn{ white-space: nowrap; }
+
+/* Toggle */
 .toggle{ display:flex; align-items:center; gap:10px; color:#0f172a; }
 .toggle input[type="checkbox"]{
   appearance:none; width:42px; height:24px; border-radius:999px; position:relative;
@@ -133,7 +163,7 @@ button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-we
 .slot.booked{
   background: #fff5f5;
   border-color: #fecaca;
-  color:#991b1b;
+  color:#991b1b; /* high-contrast red text */
 }
 .slot[aria-pressed="true"]{
   outline: 2px solid rgba(16,185,129,.4);
@@ -156,14 +186,95 @@ button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-we
   background: #eef2ff; color:#3730a3;
 }
 
+/* Toolbar above the list — right-aligned controls */
+.list-toolbar{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:12px;
+  margin: 6px 2px 0;
+}
+
+/* Centered hero banner (header variant) */
+.header.hero{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:36px 24px; margin-bottom:16px;
+  border:0; border-radius:16px;
+  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+  color:#fff;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, .25);
+}
+
+/* Hero title: one line, white */
+.header.hero .title{
+  color:#fff !important;
+  font-size: clamp(30px, 5vw, 40px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin:0;
+  text-shadow: 0 2px 12px rgba(0,0,0,.25);
+  white-space: nowrap;         /* keep on one line */
+}
+.header.hero .title > span{
+  display:inline;              /* inline second part */
+}
+.header.hero .title > span::before{
+  content:" ";                 /* space between the two parts */
+}
+
+/* Optional: light chips in hero */
+.header.hero .chip{
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+}
+
+/* Danger (Delete) button — force red + white */
+.btn.danger, button.btn.danger, a.btn.danger{
+  background: var(--danger-500) !important;
+  background-image: none !important;   /* no gradient override */
+  border-color: var(--danger-500) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 16px rgba(239,68,68,.22);
+}
+.btn.danger:hover, button.btn.danger:hover, a.btn.danger:hover{
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
 /* Responsive */
 @media (max-width: 900px){
   .grid-2, .grid-3{ grid-template-columns: 1fr; }
   .header{ padding:16px; }
-  .title{ font-size:24px; }
+  .title{ font-size: 26px; }
 }
 
-/* Accessibility */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; animation:none !important; }
+}
+/* View Details: force white text on <Link class="btn"> in all states */
+a.btn,
+a.btn:link,
+a.btn:visited,
+a.btn:hover,
+a.btn:active {
+  color: #fff !important;
+}
+
+/* Delete: solid red button with white text */
+.btn.danger,
+button.btn.danger,
+a.btn.danger{
+  background: #ef4444 !important;   /* red */
+  border-color: #ef4444 !important;
+  color: #fff !important;            /* white text */
+}
+.btn.danger:hover,
+button.btn.danger:hover,
+a.btn.danger:hover{
+  background: #dc2626 !important;    /* darker red on hover */
+  border-color: #dc2626 !important;
 }

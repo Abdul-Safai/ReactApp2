@@ -4,16 +4,18 @@ import DatePicker from "./DatePicker";
 import SlotGrid from "./SlotGrid";
 import { AREAS } from "../data/areas.js";
 import { SLOTS } from "../data/slots.js";
+import { nextId } from "../lib/storage.js";
 
 export default function ReservationForm({
   reservations,
   onCreate,
   onUpdate,
-  editing,          // null or reservation object
-  clearEditing,     // function to clear editing
+  editing,
+  clearEditing,
 }) {
-  const [area, setArea]   = useState(AREAS[0].id);
-  const [date, setDate]   = useState(() => new Date().toISOString().slice(0,10));
+  // Start with empty selections so “Choose …” shows after Reset
+  const [area, setArea]   = useState("");
+  const [date, setDate]   = useState("");
   const [slot, setSlot]   = useState("");
   const [name, setName]   = useState("");
   const [email, setEmail] = useState("");
@@ -29,14 +31,17 @@ export default function ReservationForm({
     }
   }, [editing]);
 
-  // Booked slots for current area/date (exclude currently edited row)
+  // Booked slots for current area/date; none if not chosen yet
   const bookedIds = useMemo(() => {
+    if (!area || !date) return [];
     return reservations
       .filter(r => r.area === area && r.date === date && (!editing || r.id !== editing.id))
       .map(r => r.slot);
   }, [reservations, area, date, editing]);
 
   function validateBasic() {
+    if (!area) { alert("Please choose a conservation area."); return false; }
+    if (!date) { alert("Please choose a date."); return false; }
     if (!slot) { alert("Please choose a time slot."); return false; }
     if (!name.trim()) { alert("Please enter your name."); return false; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert("Enter a valid email."); return false; }
@@ -50,6 +55,16 @@ export default function ReservationForm({
       r.slot === checkSlot &&
       r.id !== ignoreId
     );
+  }
+
+  // Reset EVERYTHING to initial empty state and exit edit mode
+  function resetForm() {
+    setArea("");
+    setDate("");
+    setSlot("");
+    setName("");
+    setEmail("");
+    if (editing) clearEditing();
   }
 
   function handleSubmit(e) {
@@ -75,7 +90,7 @@ export default function ReservationForm({
         return;
       }
       onCreate({
-        id: (crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)),
+        id: nextId(),
         area,
         areaName: AREAS.find(a=>a.id===area)?.name,
         date,
@@ -87,17 +102,17 @@ export default function ReservationForm({
       });
     }
 
-    setSlot("");
-    setName("");
-    setEmail("");
+    resetForm(); // clear after submit
   }
+
+  const slotsDisabled = !area || !date;
 
   return (
     <form onSubmit={handleSubmit} className="card grid grid-3">
       <div className="header" style={{ gridColumn: "1/-1" }}>
         <div className="title">{editing ? "Edit Reservation" : "Add Reservation"}</div>
         {editing && (
-          <button type="button" className="btn ghost" onClick={() => { clearEditing(); }}>
+          <button type="button" className="btn ghost" onClick={resetForm}>
             Cancel edit
           </button>
         )}
@@ -105,7 +120,7 @@ export default function ReservationForm({
 
       <AreaSelector value={area} onChange={setArea} />
       <DatePicker  value={date} onChange={setDate} />
-      <SlotGrid    value={slot} onChange={setSlot} bookedIds={bookedIds} />
+      <SlotGrid    value={slot} onChange={setSlot} bookedIds={bookedIds} disabled={slotsDisabled} />
 
       <div>
         <label>Full Name</label>
@@ -117,7 +132,7 @@ export default function ReservationForm({
       </div>
       <div style={{display:"flex", alignItems:"flex-end", gap:8}}>
         <button className="btn" type="submit">{editing ? "Update Reservation" : "Reserve Slot"}</button>
-        <button className="btn ghost" type="button" onClick={()=>{ setSlot(""); setName(""); setEmail(""); }}>
+        <button className="btn ghost" type="button" onClick={resetForm}>
           Reset
         </button>
       </div>

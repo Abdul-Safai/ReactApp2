@@ -1,5 +1,5 @@
 export const toISODate = (date) => {
-  if (typeof date === "string") return date;
+  if (typeof date === "string") return date; // assume yyyy-mm-dd
   const d = new Date(date);
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");

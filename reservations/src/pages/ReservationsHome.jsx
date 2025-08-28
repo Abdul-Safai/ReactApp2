@@ -1,0 +1,98 @@
+// ReservationsHome: create & list reservations (Day 11–13 "Create" + "List")
+import { useEffect, useMemo, useState } from "react";
+
+import ReservationForm from "../components/ReservationForm";
+import Filters from "../components/Filters";
+import ReservationList from "../components/ReservationList";
+
+import { loadReservations, saveReservations, ensureNumericIds } from "../lib/storage.js";
+
+export default function ReservationsHome() {
+  // Load once from localStorage; keep in state
+  const [reservations, setReservations] = useState(() => loadReservations());
+  const [editing, setEditing] = useState(null);
+
+  // Simple filters
+  const [q, setQ] = useState("");
+  const [areaFilter, setAreaFilter] = useState("");
+  const [groupByArea, setGroupByArea] = useState(true);
+
+  // One-time migration: convert legacy UUID ids to numeric ids
+  useEffect(() => {
+    const { list, changed } = ensureNumericIds(reservations);
+    if (changed) setReservations(list);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run only on first mount
+
+  // Persist whenever data changes
+  useEffect(() => { saveReservations(reservations); }, [reservations]);
+
+  function createReservation(newRes) {
+    setReservations(prev => [newRes, ...prev]);
+  }
+
+  function updateReservation(updated) {
+    setReservations(prev => prev.map(r => (r.id === updated.id ? updated : r)));
+  }
+
+  function deleteReservation(id) {
+    if (!confirm("Delete this reservation?")) return;
+    setReservations(prev => prev.filter(r => r.id !== id));
+    if (editing?.id === id) setEditing(null);
+  }
+
+  // Derived, filtered view
+  const filtered = useMemo(() => {
+    const text = q.trim().toLowerCase();
+    return reservations
+      .filter(r => !areaFilter || r.area === areaFilter)
+      .filter(r => !text || r.name.toLowerCase().includes(text) || r.email.toLowerCase().includes(text))
+      .sort((a,b) => a.date.localeCompare(b.date) || a.slot.localeCompare(b.slot));
+  }, [reservations, q, areaFilter]);
+
+  return (
+    <div className="container">
+      {/* Modern hero header (toggle removed from here) */}
+      <div className="header hero">
+        <div>
+          <h1 className="title">
+            Conservation Areas
+            <span>Reservation System</span>
+          </h1>
+        </div>
+      </div>
+
+      {/* Create / Edit form */}
+      <ReservationForm
+        reservations={reservations}
+        onCreate={createReservation}
+        onUpdate={updateReservation}
+        editing={editing}
+        clearEditing={() => setEditing(null)}
+      />
+
+      <Filters q={q} setQ={setQ} area={areaFilter} setArea={setAreaFilter} />
+
+      {/* Top-right toolbar above the list */}
+      <div className="list-toolbar">
+        <label className="toggle">
+          <input
+            type="checkbox"
+            checked={groupByArea}
+            onChange={(e) => setGroupByArea(e.target.checked)}
+          />
+          Group by Area
+        </label>
+      </div>
+
+      <div style={{ marginTop: 12 }}>
+        <ReservationList
+          items={filtered}
+          onEdit={(r)=>setEditing(r)}
+          onDelete={deleteReservation}
+          groupByArea={groupByArea}
+        />
+      </div>
+    </div>
+  );
+}
