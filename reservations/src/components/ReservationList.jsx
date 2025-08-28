@@ -31,7 +31,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                 <td>{r.email}</td>
                 <td>
                   <div className="actions">
-                    <Link className="btn" to={`/reservation/${r.id}`}>View</Link>
+                    <Link className="btn" to={`/reservation/${r.id}`}>View Details</Link>
                     <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
                     <button className="btn ghost" onClick={() => onDelete(r.id)}>Delete</button>
                   </div>
@@ -76,10 +76,11 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                   <td>{r.email}</td>
                   <td>
                     <div className="actions">
-                      <Link className="btn" to={`/reservation/${r.id}`}>View</Link>
-                      <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
-                      <button className="btn ghost" onClick={() => onDelete(r.id)}>Delete</button>
+                       <Link className="btn" to={`/reservation/${String(r.id)}`}>View Details</Link>
+                       <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
+                       <button className="btn danger" onClick={() => onDelete(r.id)}>Delete</button>
                     </div>
+
                   </td>
                 </tr>
               ))}

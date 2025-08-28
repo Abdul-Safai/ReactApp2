@@ -1,18 +1,18 @@
-// ReservationDetail: read-only detail view for a single reservation (Day 11–13 "Detail")
+// ReservationDetail: read-only detail view for a single reservation
 import { useMemo } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { loadReservations } from "../lib/storage.js";
 import { areaName } from "../data/areas.js";
 import { slotLabel } from "../data/slots.js";
 
 export default function ReservationDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
-  // Read from localStorage on render
   const reservation = useMemo(() => {
     const list = loadReservations();
-    return list.find(r => r.id === id);
+    const n = Number(id);
+    // match either numeric or string id (covers pre/post migration)
+    return list.find(r => r.id === (Number.isNaN(n) ? id : n) || String(r.id) === id);
   }, [id]);
 
   if (!reservation) {
@@ -29,13 +29,18 @@ export default function ReservationDetail() {
 
   return (
     <div className="container">
-      <div className="card" style={{ marginBottom: 12 }}>
-        <button className="btn ghost" onClick={() => navigate(-1)}>← Back</button>
-      </div>
-
       <div className="card">
-        <h2 style={{marginTop:0}}>Reservation Details</h2>
-        <table className="list">
+        <h1 className="title" style={{ marginTop: 0, marginBottom: 6 }}>
+          Reservation Details
+        </h1>
+
+        <p className="subtitle" style={{ marginTop: 8 }}>
+          <span className="chip">{areaName(reservation.area)}</span>
+          <span className="chip">{reservation.date}</span>
+          <span className="chip">{slotLabel(reservation.slot)}</span>
+        </p>
+
+        <table className="list" style={{ marginTop: 12 }}>
           <tbody>
             <tr><td><b>ID</b></td><td>{reservation.id}</td></tr>
             <tr><td><b>Area</b></td><td>{areaName(reservation.area)}</td></tr>
@@ -46,8 +51,9 @@ export default function ReservationDetail() {
             <tr><td><b>Created</b></td><td>{new Date(reservation.createdAt).toLocaleString()}</td></tr>
           </tbody>
         </table>
-        <div style={{marginTop:12}}>
-          <Link className="btn" to="/">Back to list</Link>
+
+        <div style={{ marginTop: 12 }}>
+          <Link className="btn" to="/">← Back to list</Link>
         </div>
       </div>
     </div>

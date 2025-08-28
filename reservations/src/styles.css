@@ -147,7 +147,7 @@ a.btn:link, a.btn:visited{ color: inherit; }
 .slot.booked{
   background: #fff5f5;
   border-color: #fecaca;
-  color:#991b1b;
+  color:#ffffff;
 }
 .slot[aria-pressed="true"]{
   outline: 2px solid rgba(16,185,129,.4);
@@ -188,4 +188,31 @@ a.btn:visited,
 a.btn:hover,
 a.btn:active {
   color: #fff !important;
+}
+/* Keep action buttons on one line + no wrapping */
+.actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap: nowrap;        /* <-- single line */
+  white-space: nowrap;      /* prevent text wrapping on buttons */
+}
+.actions .btn{ white-space: nowrap; }
+
+/* === FORCE Delete button red + white text (place LAST in file) === */
+.actions button.btn.danger,
+button.btn.danger,
+a.btn.danger,
+.btn.danger{
+  background: var(--danger-500) !important;  /* #ef4444 by default */
+  background-image: none !important;         /* kill gradients */
+  border-color: var(--danger-500) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 16px rgba(239,68,68,.22);
+}
+.actions button.btn.danger:hover,
+button.btn.danger:hover,
+a.btn.danger:hover{
+  background: #dc2626 !important;            /* darker red on hover */
+  border-color: #dc2626 !important;
 }

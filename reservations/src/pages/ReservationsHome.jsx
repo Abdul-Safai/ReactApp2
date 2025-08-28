@@ -5,7 +5,7 @@ import ReservationForm from "../components/ReservationForm";
 import Filters from "../components/Filters";
 import ReservationList from "../components/ReservationList";
 
-import { loadReservations, saveReservations } from "../lib/storage.js";
+import { loadReservations, saveReservations, ensureNumericIds } from "../lib/storage.js";
 
 export default function ReservationsHome() {
   // Load once from localStorage; keep in state
@@ -16,6 +16,13 @@ export default function ReservationsHome() {
   const [q, setQ] = useState("");
   const [areaFilter, setAreaFilter] = useState("");
   const [groupByArea, setGroupByArea] = useState(true);
+
+  // One-time migration: convert legacy UUID ids to numeric ids
+  useEffect(() => {
+    const { list, changed } = ensureNumericIds(reservations);
+    if (changed) setReservations(list);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run only on first mount
 
   // Persist whenever data changes
   useEffect(() => { saveReservations(reservations); }, [reservations]);
@@ -34,7 +41,7 @@ export default function ReservationsHome() {
     if (editing?.id === id) setEditing(null);
   }
 
-  // Derived, filtered view (like the “todo” tutorial)
+  // Derived, filtered view
   const filtered = useMemo(() => {
     const text = q.trim().toLowerCase();
     return reservations
@@ -45,12 +52,21 @@ export default function ReservationsHome() {
 
   return (
     <div className="container">
-      <div className="header">
+      {/* Modern hero header */}
+      <div className="header hero">
         <div>
-          <div className="title">Conservation Areas Reservation System</div>
+          <h1 className="title">
+            Conservation Areas
+            <span>Reservation System</span>
+          </h1>
         </div>
+
         <label className="toggle">
-          <input type="checkbox" checked={groupByArea} onChange={(e)=>setGroupByArea(e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={groupByArea}
+            onChange={(e)=>setGroupByArea(e.target.checked)}
+          />
           Group by Area
         </label>
       </div>
