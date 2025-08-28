@@ -48,7 +48,6 @@ export default function ReservationsHome() {
       <div className="header">
         <div>
           <div className="title">Conservation Areas Reservation System</div>
-          <div className="subtitle">Open 9:00–18:00 • 3-hour slots • Double-booking prevention • localStorage</div>
         </div>
         <label className="toggle">
           <input type="checkbox" checked={groupByArea} onChange={(e)=>setGroupByArea(e.target.checked)} />

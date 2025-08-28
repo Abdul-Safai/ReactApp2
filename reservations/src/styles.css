@@ -43,7 +43,7 @@ body{
   box-shadow: var(--shadow-soft);
 }
 .title{
-  font-size:28px; font-weight:800; letter-spacing:-.02em; margin-bottom:6px;
+  font-size:45px; font-weight:900; letter-spacing:-.02em; margin-bottom:6px;
   background: linear-gradient(90deg, #0f172a, #2563eb);
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
