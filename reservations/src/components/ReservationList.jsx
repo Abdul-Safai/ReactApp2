@@ -1,5 +1,6 @@
 import { AREA_ORDER, areaName } from "../data/areas.js";
 import { slotLabel } from "../data/slots.js";
+import { Link } from "react-router-dom";
 
 export default function ReservationList({ items, onEdit, onDelete, groupByArea }) {
   if (items.length === 0) {
@@ -17,7 +18,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
               <th>Slot</th>
               <th>Name</th>
               <th>Email</th>
-              <th style={{width:180}}>Actions</th>
+              <th style={{width:240}}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -30,6 +31,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                 <td>{r.email}</td>
                 <td>
                   <div className="actions">
+                    <Link className="btn" to={`/reservation/${r.id}`}>View</Link>
                     <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
                     <button className="btn ghost" onClick={() => onDelete(r.id)}>Delete</button>
                   </div>
@@ -42,11 +44,9 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
     );
   }
 
-  // Group by area
+  // Grouped view
   const groups = AREA_ORDER.map(id => ({
-    id,
-    name: areaName(id),
-    rows: items.filter(r => r.area === id)
+    id, name: areaName(id), rows: items.filter(r => r.area === id)
   })).filter(g => g.rows.length > 0);
 
   return (
@@ -64,7 +64,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                 <th>Slot</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th style={{width:180}}>Actions</th>
+                <th style={{width:240}}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +76,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                   <td>{r.email}</td>
                   <td>
                     <div className="actions">
+                      <Link className="btn" to={`/reservation/${r.id}`}>View</Link>
                       <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
                       <button className="btn ghost" onClick={() => onDelete(r.id)}>Delete</button>
                     </div>

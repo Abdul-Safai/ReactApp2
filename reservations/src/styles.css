@@ -80,8 +80,18 @@ input:focus, select:focus{
   transform: translateY(-1px);
 }
 
-/* Buttons */
-button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-weight:700; }
+/* Buttons — unified for <button> and <a class="btn"> */
+.btn, a.btn, button.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;   /* no underline on links */
+}
 .btn{
   background: linear-gradient(180deg, var(--primary-500), var(--primary-600));
   color:#fff;
@@ -92,12 +102,16 @@ button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-we
 .btn:active{ transform: translateY(0); filter: brightness(.98); }
 .btn.secondary{
   background: linear-gradient(180deg, #10b981, #059669);
+  color:#fff;
   box-shadow: 0 8px 16px rgba(16, 185, 129, .22);
 }
 .btn.ghost{
-  background: transparent; color:#0f172a;
+  background: transparent;
+  color:#0f172a;
   border:1px solid var(--border);
 }
+a.btn:link, a.btn:visited{ color: inherit; }
+
 .actions{ display:flex; gap:10px; flex-wrap:wrap; }
 
 /* Toggle next to "Group by Area" */
@@ -166,4 +180,12 @@ button{ cursor:pointer; border:0; padding:11px 14px; border-radius:12px; font-we
 /* Accessibility */
 @media (prefers-reduced-motion: reduce){
   *{ transition:none !important; animation:none !important; }
+}
+/* Force white text on primary <Link class="btn"> in all states */
+a.btn,
+a.btn:link,
+a.btn:visited,
+a.btn:hover,
+a.btn:active {
+  color: #fff !important;
 }
