@@ -52,7 +52,7 @@ export default function ReservationsHome() {
 
   return (
     <div className="container">
-      {/* Modern hero header */}
+      {/* Modern hero header (toggle removed from here) */}
       <div className="header hero">
         <div>
           <h1 className="title">
@@ -60,15 +60,6 @@ export default function ReservationsHome() {
             <span>Reservation System</span>
           </h1>
         </div>
-
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={groupByArea}
-            onChange={(e)=>setGroupByArea(e.target.checked)}
-          />
-          Group by Area
-        </label>
       </div>
 
       {/* Create / Edit form */}
@@ -81,6 +72,18 @@ export default function ReservationsHome() {
       />
 
       <Filters q={q} setQ={setQ} area={areaFilter} setArea={setAreaFilter} />
+
+      {/* Top-right toolbar above the list */}
+      <div className="list-toolbar">
+        <label className="toggle">
+          <input
+            type="checkbox"
+            checked={groupByArea}
+            onChange={(e) => setGroupByArea(e.target.checked)}
+          />
+          Group by Area
+        </label>
+      </div>
 
       <div style={{ marginTop: 12 }}>
         <ReservationList
