@@ -278,3 +278,12 @@ a.btn.danger:hover{
   background: #dc2626 !important;    /* darker red on hover */
   border-color: #dc2626 !important;
 }
+.detail-image{
+  width: 100%;
+  max-width: 350px;
+  height: 450px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  display: block;
+}
