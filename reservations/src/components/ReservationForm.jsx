@@ -4,8 +4,7 @@ import DatePicker from "./DatePicker";
 import SlotGrid from "./SlotGrid";
 import { AREAS } from "../data/areas.js";
 import { SLOTS } from "../data/slots.js";
-// no DB id here; still localStorage numeric ids if you added that earlier
-import { nextId } from "../lib/storage.js"; // keep if you're using numeric IDs; remove if not
+import { nextId } from "../lib/storage.js"; // keep if you're using numeric IDs
 
 export default function ReservationForm({
   reservations,
@@ -20,7 +19,7 @@ export default function ReservationForm({
   const [slot, setSlot]   = useState("");
   const [name, setName]   = useState("");
   const [email, setEmail] = useState("");
-  const [image, setImage] = useState(null);  // data URL or null
+  const [image, setImage] = useState(null);      // data URL or null
   const [imgPreview, setImgPreview] = useState(null);
 
   // Pre-fill when editing
@@ -70,8 +69,7 @@ export default function ReservationForm({
       reader.onload = () => {
         const img = new Image();
         img.onload = () => {
-          // Resize to max 1280px on the longest edge
-          const max = 1280;
+          const max = 1280; // longest edge
           let { width, height } = img;
           if (width > max || height > max) {
             const scale = Math.min(max / width, max / height);
@@ -83,7 +81,6 @@ export default function ReservationForm({
           canvas.height = height;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, width, height);
-          // Use JPEG for better compression; fallback to PNG if needed
           const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
           resolve(dataUrl);
         };
@@ -197,8 +194,7 @@ export default function ReservationForm({
           <img
             src={imgPreview}
             alt="Selected area"
-            className="detail-image"
-            style={{ marginTop: 8, maxWidth: 240 }}
+            className="preview-image"   /* smaller height via CSS */
           />
         )}
       </div>

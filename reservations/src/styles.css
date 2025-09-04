@@ -280,10 +280,22 @@ a.btn.danger:hover{
 }
 .detail-image{
   width: 100%;
-  max-width: 350px;
+  max-width: 500px;
   height: 450px;
   border-radius: 12px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
   display: block;
+}
+/* Small preview in the form (edit/add) */
+.preview-image{
+  width: 100%;
+  max-width: 300px;   /* keep it compact */
+  height: 250px;      /* ↓ shorter height */
+  object-fit: cover;  /* crop to fit, no squish */
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  display: block;
+  margin-top: 8px;
 }
