@@ -1,13 +1,36 @@
 import { AREA_ORDER, areaName } from "../data/areas.js";
 import { slotLabel } from "../data/slots.js";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/authContext.jsx";
 
 export default function ReservationList({ items, onEdit, onDelete, groupByArea }) {
-  if (items.length === 0) {
-    return <div className="card">No reservations found.</div>;
-  }
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
 
-  // Flat list (Group by Area = OFF)
+  if (items.length === 0) return <div className="card">No reservations found.</div>;
+
+  const Actions = ({ r }) => (
+    <div className="actions">
+      <Link className="btn" to={`/reservation/${String(r.id)}`}>View Details</Link>
+      <button
+        className="btn secondary"
+        onClick={() => onEdit(r)}
+        disabled={!isAdmin}
+        title={isAdmin ? "Edit reservation" : "Admins only"}
+      >
+        Edit
+      </button>
+      <button
+        className="btn danger"
+        onClick={() => onDelete(r.id)}
+        disabled={!isAdmin}
+        title={isAdmin ? "Delete reservation" : "Admins only"}
+      >
+        Delete
+      </button>
+    </div>
+  );
+
   if (!groupByArea) {
     return (
       <div className="card">
@@ -30,13 +53,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                 <td>{slotLabel(r.slot)}</td>
                 <td>{r.name}</td>
                 <td>{r.email}</td>
-                <td>
-                  <div className="actions">
-                    <Link className="btn" to={`/reservation/${String(r.id)}`}>View Details</Link>
-                    <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
-                    <button className="btn danger" onClick={() => onDelete(r.id)}>Delete</button>
-                  </div>
-                </td>
+                <td><Actions r={r} /></td>
               </tr>
             ))}
           </tbody>
@@ -45,10 +62,9 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
     );
   }
 
-  // Grouped view (Group by Area = ON)
-  const groups = AREA_ORDER.map(id => ({
-    id, name: areaName(id), rows: items.filter(r => r.area === id)
-  })).filter(g => g.rows.length > 0);
+  const groups = AREA_ORDER
+    .map(id => ({ id, name: areaName(id), rows: items.filter(r => r.area === id) }))
+    .filter(g => g.rows.length > 0);
 
   return (
     <>
@@ -75,13 +91,7 @@ export default function ReservationList({ items, onEdit, onDelete, groupByArea }
                   <td>{slotLabel(r.slot)}</td>
                   <td>{r.name}</td>
                   <td>{r.email}</td>
-                  <td>
-                    <div className="actions">
-                      <Link className="btn" to={`/reservation/${String(r.id)}`}>View Details</Link>
-                      <button className="btn secondary" onClick={() => onEdit(r)}>Edit</button>
-                      <button className="btn danger" onClick={() => onDelete(r.id)}>Delete</button>
-                    </div>
-                  </td>
+                  <td><Actions r={r} /></td>
                 </tr>
               ))}
             </tbody>

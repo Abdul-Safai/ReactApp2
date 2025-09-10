@@ -299,3 +299,97 @@ a.btn.danger:hover{
   display: block;
   margin-top: 8px;
 }
+/* Auth chip in hero */
+.user-chip{
+  display:flex; gap:10px; align-items:center;
+  padding:8px 10px; border-radius:999px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.25);
+  color:#fff;
+}
+.btn[disabled]{
+  opacity:.55; cursor:not-allowed; filter: grayscale(10%);
+}
+
+/* Ensure ghost links (like Create account) are visible */
+a.btn.ghost,
+a.btn.ghost:link,
+a.btn.ghost:visited,
+a.btn.ghost:hover,
+a.btn.ghost:active {
+  color:#0f172a !important;
+}
+/* Hero: column layout keeps title centered; actions row sits BELOW title, right-aligned */
+.header.hero{
+  position: relative;
+  display: block;
+  text-align: center;
+  padding: 36px 24px;
+  margin-bottom: 16px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, .25);
+}
+
+/* Explicit column hint (semantic only) */
+.hero-column{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header.hero .title.title-center{
+  margin: 0;
+  font-size: clamp(28px, 4.6vw, 40px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+
+/* A full-width row that right-aligns the pill */
+.hero-actions-row{
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* right side */
+}
+
+/* The pill itself (no absolute positioning) */
+.hero-actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.28);
+  color: #fff;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  max-width: 90%;
+}
+.hero-actions .user-tag{
+  font-weight: 600;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero-actions .btn.logout,
+.hero-actions .btn.ghost{
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.55);
+  background: transparent;
+}
+.hero-actions .btn.ghost:hover{
+  background: rgba(255,255,255,.16);
+}
+
+/* Mobile: center the pill below title */
+@media (max-width: 640px){
+  .hero-actions-row{
+    justify-content: center;
+  }
+}

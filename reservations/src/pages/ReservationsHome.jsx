@@ -1,4 +1,4 @@
-// ReservationsHome: create & list reservations (Day 11–13 "Create" + "List")
+// ReservationsHome: create & list reservations + user badge below title
 import { useEffect, useMemo, useState } from "react";
 
 import ReservationForm from "../components/ReservationForm";
@@ -6,8 +6,11 @@ import Filters from "../components/Filters";
 import ReservationList from "../components/ReservationList";
 
 import { loadReservations, saveReservations, ensureNumericIds } from "../lib/storage.js";
+import { useAuth } from "../context/authContext.jsx";
 
 export default function ReservationsHome() {
+  const { user, logout } = useAuth();
+
   // Load once from localStorage; keep in state
   const [reservations, setReservations] = useState(() => loadReservations());
   const [editing, setEditing] = useState(null);
@@ -30,11 +33,9 @@ export default function ReservationsHome() {
   function createReservation(newRes) {
     setReservations(prev => [newRes, ...prev]);
   }
-
   function updateReservation(updated) {
     setReservations(prev => prev.map(r => (r.id === updated.id ? updated : r)));
   }
-
   function deleteReservation(id) {
     if (!confirm("Delete this reservation?")) return;
     setReservations(prev => prev.filter(r => r.id !== id));
@@ -52,14 +53,20 @@ export default function ReservationsHome() {
 
   return (
     <div className="container">
-      {/* Modern hero header (toggle removed from here) */}
-      <div className="header hero">
-        <div>
-          <h1 className="title">
-            Conservation Areas
-            <span>Reservation System</span>
-          </h1>
-        </div>
+      {/* Hero/header: centered title; user pill BELOW title, right-aligned */}
+      <div className="header hero hero-column">
+        <h1 className="title title-center">Conservation Areas Reservation System</h1>
+
+        {user && (
+          <div className="hero-actions-row">
+            <div className="hero-actions">
+              <span className="user-tag">{user.name} • {user.role}</span>
+              <button type="button" className="btn ghost logout" onClick={logout}>
+                Logout
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Create / Edit form */}
@@ -73,13 +80,13 @@ export default function ReservationsHome() {
 
       <Filters q={q} setQ={setQ} area={areaFilter} setArea={setAreaFilter} />
 
-      {/* Top-right toolbar above the list */}
+      {/* Toolbar above the list: move "Group by Area" to the right */}
       <div className="list-toolbar">
         <label className="toggle">
           <input
             type="checkbox"
             checked={groupByArea}
-            onChange={(e) => setGroupByArea(e.target.checked)}
+            onChange={(e)=>setGroupByArea(e.target.checked)}
           />
           Group by Area
         </label>
