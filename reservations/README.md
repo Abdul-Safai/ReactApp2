@@ -1,4 +1,12 @@
 # React + Vite
+## Admin Secret (for grading)
+**ADMIN2025**
+
+How to test admin:
+1) Run Apache & MySQL (XAMPP).
+2) Frontend: `npm run dev` → http://localhost:5173
+3) Open http://localhost:5173/register
+4) Choose **Role: Admin**, enter secret **ADMIN2025**, submit.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
